@@ -57,7 +57,7 @@ source("checker.R")
 frequently. All suggestions for improvement are welcome. All Rmd, tex,
 html, pdf, R, and C files are in the public domain. Attribution will be
 appreciated, but is not required. The files can be found at
-<https://github.com/deleeuw> 
+<https://github.com/deleeuw/decomp> 
 
 \sectionbreak
 
