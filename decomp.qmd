@@ -1,0 +1,283 @@
+---
+title: Matrix Decomposition with Kronecker Weights
+author: 
+    - name: Jan de Leeuw
+      orcid: 0000-0003-1420-1797
+      email: jan@deleeuwpdx.net
+      affiliation: 
+        - name: University of California Los Angeles
+          city: Los Angeles
+          state: CA
+          url: www.ucla.edu
+      license: "CC0"
+date: last-modified
+date-format: long
+bibliography: [mypubs.bib, total.bib]
+number-sections: true
+pdf-engine: lualatex
+keep-tex: true
+format:
+   pdf:
+    fontsize: 12pt
+    include-in-header: 
+     - preamble.tex
+    keep-tex: true
+    link-citations: true
+    documentclass: scrartcl
+    number-sections: true
+   html:
+    fontsize: 12pt
+    include-in-header: 
+     - preamble.css
+    keep-md: true
+    number-sections: true
+toc: true
+toc-depth: 3
+editor: source
+papersize: letter
+graphics: true
+link-citations: true
+mainfont: Times New Roman
+abstract: The familiar orthogonal decomposition of a matrix into row effect, column effects, and interactions is generalized to a matrix space with the Kronecker inner product.
+---
+
+```{r loadpackages, echo = FALSE}
+suppressPackageStartupMessages(library(knitr, quietly = TRUE))
+suppressPackageStartupMessages(library(tinytex, quietly = TRUE))
+```
+
+```{r echo = FALSE}
+source("decompose.R")
+source("checker.R")
+```
+
+\sectionbreak 
+
+**Note:** This is a working manuscript which will be expanded/updated
+frequently. All suggestions for improvement are welcome. All Rmd, tex,
+html, pdf, R, and C files are in the public domain. Attribution will be
+appreciated, but is not required. The files can be found at
+<https://github.com/deleeuw> 
+
+\sectionbreak
+
+# Kronecker Weights
+
+$R$ and $C$ are positive semidefinite matrices of order $n$ and $m$.
+They define an inner product on the space $\mathbb{R}^{n\times m}$ of 
+$n\times m$ matrices as
+$\langle X, Y\rangle_{RC}=\text{tr}\ RXCY'$ and a corresponding squared
+norm (pseudo-norm if either $R$ or $C$ is singular) as
+$\|X\|_{RC}^2=\langle X, X\rangle_{RC}$. From now on we leave out the
+subscript $RC$.
+
+# Matrix Decomposition
+
+Define three subspaces of $\mathbb{R}^{n\times m}$. We use $e$ for vectors with all elements equal to one. The number of elements in $e$ will be clear from the context, otherwise we will use $e_m$ and $e_n$.
+
+1. $\mathbb{L}_\mu$, constant matrices, $X=\mu e_ne_m'$.
+2. $\mathbb{L}_a$, matrices with all columns the same, $X=ae_m'$.
+3. $\mathbb{L}_b$, matrices with all rows the same $X=e_nb'$.
+
+We will hoose $a, b, \mu$ such that these three subspacs are orthogonal
+in the Kronecker inner product. For this we need
+\begin{subequations}
+\begin{align}
+\text{tr}\ R\mu ee'Cea'&=\mu a'Re\times e'Ce=0,\\
+\text{tr}\ R\mu ee'Cbe'&=\mu b'Ce\times e'Re,\\
+\text{tr}\ Rae'Cbe'&=a'Re\times b'Ce.
+\end{align}
+\end{subequations}
+
+It follows the three subspaces are orthogonal if $a'Re=b'Ce=0$. Thus we
+redefine our subspaces as
+
+1. $\mathbb{L}_\mu$: all $X$ with $X=\mu ee'$.
+2. $\mathbb{L}_a$: all $X$ with $X=ae'$ where $a'Re=0$.
+3. $\mathbb{L}_b$: all $X$  with $X=eb'$ where $b'Ce=0$.
+
+Now project, in the Kronecker metric, matrix $X$ on each of these orthogonal subspaces.
+
+First on $\mathbb{L}_\mu$. Minimize over $\mu$
+\begin{equation}
+\|X-\mu ee'\|^2=\|X\|^2-2\mu e'RXCe+\mu^2e'Re\times e'Ce,
+\end{equation}
+and thus
+\begin{equation}
+\hat\mu=\frac{e'RXCe}{e'Re\times e'Ce}.\label{eq-mu}
+\end{equation}
+Now over $\mathbb{L}_a$. We have
+\begin{equation}
+\|X-ae'\|^2=\|X\|^2-2a'RXCe+a'Ra\times e'Ce,
+\end{equation}
+which must be minimized over all $a'Re=0$. Use a Lagrange multiplier $\lambda$.
+Stationary equations are
+\begin{equation}
+RXCe-\lambda Re=e'Ce\times Ra.
+\end{equation}
+Premultiply by $e'$ gives
+\begin{equation}
+\hat\lambda=\frac{e'RXCe}{e'Re},
+\end{equation}
+and thus 
+\begin{equation}
+e'Ce\times\hat a=XCe-e\frac{e'RXCe}{e'Re},
+\end{equation}
+or
+\begin{equation}
+\hat a=\left(I-\frac{ee'R}{e'Re}\right)X\left(\frac{Ce}{e'Ce}\right).
+\end{equation}
+
+It is convenient to define the projectors
+\begin{align}
+P:=\frac{ee'R}{e'Re},\\
+Q:=\frac{Cee'}{e'Ce}.
+\end{align}
+The projection on $\mathbb{L}_a$ is 
+\begin{equation}
+\hat ae'=(I-P)XQ.
+\end{equation}
+
+Projecting on $\mathbb{L}_b$ is similar, by symmetry. Thus
+\begin{equation}
+e\hat b'=PX(I-Q).
+\end{equation}
+In addition, from \eqref{eq-mu}, 
+\begin{equation}
+\hat\mu ee'=PXQ.
+\end{equation}
+It follows that if we define
+\begin{equation}
+\hat H:=X-\hat\mu ee'-\hat ae'-e\hat b'\label{eq-hdef}
+\end{equation}
+then
+\begin{equation}
+\hat H=(I-P)X(I-Q).
+\end{equation}
+
+Define $\mathbb{L}_h$ as the subspace of all matrices of this form, or equivalently the matrices with $HCe=0$ and $e'RH=0$.
+
+Because $(I-Q)Ce=0$ it follows that
+\begin{subequations}
+\begin{equation}
+\text{tr}\ R\hat HC(\hat\mu ee')=0
+\end{equation}
+and 
+\begin{equation}
+\text{tr}\ R\hat HC(e\hat b')=0
+\end{equation}
+and
+\begin{equation}
+\text{tr}\ R\hat ae'C\hat H'=0
+\end{equation}
+\end{subequations}
+Thus $\mathbb{L}_h$ is also orthogonal in the Kronecker inner product to the other three subspaces. It follows that in the Kronecker norm
+\begin{equation}
+\|X\|^2=\|PXQ\|^2+\|(I-P)XQ\|^2+\|PX(I-Q)\|^2+\|(I-P)X(I-Q)\|^2,
+\end{equation}
+and thus we not only have a decomposition of the data $X$, but also of its Kronecker sum of squares.
+
+It also follows that if $Y=\mu ee'+ae'+eb'+H$, with $a'Re=b'Ce=0$, then
+\begin{multline}
+\|X-Y\|^2=\|PXQ-\mu ee'\|^2+\|(I-P)XQ-ae'\|^2+\\\|PX(I-Q)-eb'\|^2+\|(I-P)X(I-Q)-H\|^2
+\end{multline}
+THus if we are fitting $Y$ to $X$ with seperable restrictions on $a$, $b$, and
+$H$ (in addition to $a'Re=b'Ce=0$) then we can minmize each of the four 
+components separately.
+
+We have defined $H$ in \eqref{eq-hdef} as the residual after projecting
+on the three orthogonal spaces. The orthogonality of the residual space
+is YAPT (Yet Another Pythogorean Theorem). Alternatively, we could
+have defined $\mathbb{L}_h$ as the space of $n\times m$ matrices
+satisfying $HCe=0$ and $H'Re=0$ and project on this space. This will
+produce the same $\hat H$.
+
+The developments in this paper can be generalized in several ways. In the first
+place the same reasoning applies to multiway arrays. If the array has $p$
+"dimensions" then there are $2^p$ components. Secondly, 
+vectors $e_n$ and $e_m$ in the formulas can be replaced by any vectors $u$ and $v$ with $n$ and $m$ elements. In fact, with some additional notation, they can
+be replaced by matrices $U$ and $V$. And finally the results apply to
+any finite sequence of orthogonal subspaces in any (finite-dimensional) inner
+product space.
+
+
+
+\sectionbreak
+
+
+# Example
+
+```{r}
+set.seed(12345)
+ymat <- matrix(rnorm(12), 4, 3)
+rmat <- crossprod(matrix(rnorm(40), 10, 4)) / 10
+cmat <- crossprod(matrix(rnorm(30), 10, 3)) / 10
+```
+```{r echo = FALSE}
+print("ymat")
+print(ymat)
+print("cmat")
+print(cmat)
+print("rmat")
+print(rmat)
+```
+
+\sectionbreak
+
+We now apply the decompose() function from the code section.
+
+```{r echo}
+h<-decompose(ymat, rmat, cmat)
+```
+The four components are:
+```{r echo = FALSE}
+print(h$dd)
+```
+
+\sectionbreak
+
+The Kronecker inner products of the four components are:
+```{r echo = FALSE}
+print(h$ip)
+```
+The trace of the inner product matrix and the squared norm of the data:
+```{r echo = FALSE}
+print(h$ssq)
+```
+
+\sectionbreak
+
+# Code
+
+```{r eval = FALSE}
+set.seed(12345)
+ymat <- matrix(rnorm(12), 4, 3)
+rmat <- crossprod(matrix(rnorm(40), 10, 4)) / 10
+cmat <- crossprod(matrix(rnorm(30), 10, 3)) / 10
+
+decompose <- function(xmat, rmat, cmat) {
+  n <- nrow(xmat)
+  m <- ncol(xmat)
+  pmat <- matrix(colSums(rmat), n, n, byrow = TRUE) / sum(rmat)
+  qmat <- matrix(rowSums(cmat), m, m) / sum(cmat)
+  px <- pmat %*% xmat
+  xq <- xmat %*% qmat
+  dd <- rep(list(0),4) 
+  dd[[1]] <- px %*% qmat
+  dd[[2]] <- px - dd[[1]]
+  dd[[3]] <- xq - dd[[1]]
+  dd[[4]] <- xmat - dd[[1]] - dd[[2]] - dd[[3]]
+  ip <- matrix(0, 4, 4)
+  for (i in 1:4) {
+    for (j in 1:4) {
+      ip[i, j] <- kroneckerIP(dd[[i]], dd[[j]], rmat, cmat)
+    }
+  }
+  ssq <- c(kroneckerIP(xmat, xmat, rmat, cmat), sum(diag(ip)))
+  return(list(dd = dd, ip = ip, ssq = ssq))
+}
+
+kroneckerIP <- function(xmat, ymat, rmat, cmat) {
+  return(sum(ymat * (rmat %*% xmat %*% cmat)))
+}
+```
