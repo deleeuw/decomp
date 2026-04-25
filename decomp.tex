@@ -248,7 +248,7 @@
 
 \title{Matrix Decomposition with Kronecker Weights}
 \author{Jan de Leeuw}
-\date{April 23, 2026}
+\date{April 24, 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -341,14 +341,14 @@ RXCe-\lambda Re=e'Ce\times Ra.
 \end{equation} Premultiply by \(e'\) gives \begin{equation}
 \hat\lambda=\frac{e'RXCe}{e'Re},
 \end{equation} and thus \begin{equation}
-e'Ce\times\hat a=XCe-e\frac{e'RXCe}{e'Re},
+e'Ce\times\hat a=XCe-e\frac{e'RXCe}{e'Re},\label{eq-asolve}
 \end{equation} or \begin{equation}
 \hat a=\left(I-\frac{ee'R}{e'Re}\right)X\left(\frac{Ce}{e'Ce}\right).
 \end{equation}
 
 It is convenient to define the projectors \begin{align}
-P:=\frac{ee'R}{e'Re},\\
-Q:=\frac{Cee'}{e'Ce}.
+P:=\frac{ee'R}{e'Re},\label{eq-pdef}\\
+Q:=\frac{Cee'}{e'Ce}.\label{eq-qdef}
 \end{align} The projection on \(\mathbb{L}_a\) is \begin{equation}
 \hat ae'=(I-P)XQ.
 \end{equation}
@@ -388,17 +388,48 @@ the Kronecker norm \begin{equation}
 
 It also follows that if \(Y=\mu ee'+ae'+eb'+H\), with \(a'Re=b'Ce=0\),
 then \begin{multline}
-\|X-Y\|^2=\|PXQ-\mu ee'\|^2+\|(I-P)XQ-ae'\|^2+\\\|PX(I-Q)-eb'\|^2+\|(I-P)X(I-Q)-H\|^2
-\end{multline} THus if we are fitting \(Y\) to \(X\) with seperable
+\|X-Y\|^2=\|PXQ-\mu ee'\|^2+\|(I-P)XQ-ae'\|^2+\\\|PX(I-Q)-eb'\|^2+\|(I-P)X(I-Q)-H\|^2,
+\end{multline} which can also be written as \begin{equation}
+\|X-Y\|^2=\|(\hat\mu-\mu)ee'\|^2+\|(\hat a-a)e'\|^2+\|e(\hat b-b)'\|^2+\|\hat H-H\|^2.
+\end{equation} Thus if we are fitting \(Y\) to \(X\) with separable
 restrictions on \(a\), \(b\), and \(H\) (in addition to \(a'Re=b'Ce=0\))
-then we can minmize each of the four components separately.
+then we can minimize each of the four components separately.
 
 We have defined \(H\) in \eqref{eq-hdef} as the residual after
 projecting on the three orthogonal spaces. The orthogonality of the
 residual space is YAPT (Yet Another Pythogorean Theorem). Alternatively,
 we could have defined \(\mathbb{L}_h\) as the space of \(n\times m\)
 matrices satisfying \(HCe=0\) and \(H'Re=0\) and project on this space.
-This will produce the same \(\hat H\).
+This will produce the same \(\hat H\). Here is a proof of this last
+statement. The stationary equations for the projection, using two
+vectors \(\phi\) and \(\psi\) of Lagrange multipliers are
+\begin{subequations}
+\begin{align}
+H&=X-\phi e'-e\psi',\label{eq-hstat1}\\
+HCe &= 0,\label{eq-hstat2}\\
+H'Re&=0.\label{eq-hstat3}
+\end{align}
+\end{subequations} Postmultiply \eqref{eq-hstat1} by \(Ce\). Then we
+must have \(0=XCe-\phi e'Ce-e\psi'Ce\) and thus \begin{subequations}
+\begin{equation}
+\phi=\frac{XCe}{e'Ce}-\frac{ee'C}{e'Ce}\psi.\label{eq-phicalc}
+\end{equation}
+In the same way
+\begin{equation}
+\psi=\frac{X'Re}{e'Re}-\frac{ee'R}{e'Re}\phi.\label{eq-psicalc}
+\end{equation}
+\end{subequations} Substitute \eqref{eq-psicalc} into
+\eqref{eq-phicalc}. Then \begin{equation}
+\phi=\frac{XCe}{e'Ce}-\frac{ee'C}{e'Ce}\left\{\frac{X'Re}{e'Re}-\frac{ee'R}{e'Re}\phi\right\}.
+\end{equation} Collecting terms and using \eqref{eq-asolve} and
+\eqref{eq-pdef} gives \((I-P)\phi=\hat a\). In the same way
+\((I-Q)\psi=\hat b\). This implies that \(\phi=\hat a+\alpha e\) and
+\(\psi=\hat b+\beta e\) for some scalars \(\alpha\) and \(\beta\), so
+that \begin{equation}
+\hat H=X-\hat ae'-e\hat b'-(\alpha+\beta)ee'.\label{eq-hcalc}
+\end{equation} Premultiplying with \(e'R\) and postmultiplying with
+\(Ce\), and then using \eqref{eq-hstat2} and \eqref{eq-hstat3}, gives
+that \(\alpha+\beta=\hat\mu\). End of proof.
 
 The developments in this paper can be generalized in several ways. In
 the first place the same reasoning applies to multiway arrays. If the
