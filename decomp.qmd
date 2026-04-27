@@ -379,15 +379,16 @@ x_{ijk}=\delta_{ik},
 x_{ijk}=\epsilon_{jk},$
 and a final "residual" space. The orthogonality of the subspaces
 and the formulas for the projections can be worked out in the same
-way as for the two-dimensional case.
+way as for the two-dimensional case. I may do this in some other paper,
 
-## Coordinate-free
+## Look Ma, No Coordinates
 
-The results apply to any finite sequence of orthogonal subspaces in any finite-dimensional inner product space. Suppose $\Pi_1,..,\Pi_t$ are projectors (linear idempotent operators) on orthogonal $\mathbb{L}_1,\cdots,\mathbb{L}_t$. Thus $\Pi_s=\Pi_s^2$ for all $s$ and $\Pi_s\Pi_t=0$ for all $s\neq t$. If $\Pi_r=I-(\Pi_1+\cdots+\Pi_t)$ then $\Pi_s\Pi_r=0$ for all $s$. Thus the residual space is orthogonal to all $\mathbb{L}_s$. The decomposition is
+The results apply to any finite sequence of orthogonal subspaces in any finite-dimensional inner product space. Suppose $\Pi_1,..,\Pi_t$ are projectors (linear idempotent operators) on orthogonal $\mathbb{L}_1,\cdots,\mathbb{L}_t$,
+and $\circ$ is composition. Thus $\Pi_s=\Pi_s\circ\Pi_s$ for all $s$ and $\Pi_s\circ \Pi_t=0$ for all $s\neq t$. If $\Pi_r=I-(\Pi_1+\cdots+\Pi_t)$ then $\Pi_s\circ \Pi_r=0$ for all $s$. Thus the residual space is orthogonal to all $\mathbb{L}_s$. The decomposition is
 \begin{equation}
 X=\Pi_1(X)+\Pi_2(X)+\cdots+\Pi_r(X).
 \end{equation}
-In our examples in the previous sections we have $\Pi_1(X)=PXQ$, $\Pi_2(X)=PX(I-Q)$,
+In our examples from the previous sections we have $\Pi_1(X)=PXQ$, $\Pi_2(X)=PX(I-Q)$,
 $\Pi_3(X)=(I-P)XQ$, and $\Pi_4(X)=(I-P)X(I-Q)$.
 
 
