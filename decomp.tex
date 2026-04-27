@@ -248,7 +248,7 @@
 
 \title{Matrix Decomposition with Kronecker Weights}
 \author{Jan de Leeuw}
-\date{April 24, 2026}
+\date{April 26, 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -275,67 +275,96 @@ can be found at \url{https://github.com/deleeuw/decomp}
 
 \section{Kronecker Weights}\label{kronecker-weights}
 
-\(R\) and \(C\) are positive semidefinite matrices of order \(n\) and
-\(m\). They define an inner product on the space
+Suppose \(R\) and \(C\) are positive semi-definite matrices of order
+\(n\) and \(m\). They define an inner product on the space
 \(\mathbb{R}^{n\times m}\) of \(n\times m\) matrices as
 \(\langle X, Y\rangle_{RC}=\text{tr}\ RXCY'\) and a corresponding
 squared norm (pseudo-norm if either \(R\) or \(C\) is singular) as
-\(\|X\|_{RC}^2=\langle X, X\rangle_{RC}\). From now on we leave out the
-subscript \(RC\).
+\(\|X\|_{RC}^2=\langle X, X\rangle_{RC}\).
+
+Two important alternative representations of this inner product are
+\begin{equation}
+\langle X,Y\rangle_{RC} = \text{vec}(X)'(C\otimes R)\text{vec}(Y),
+\end{equation} or, elementwise, \begin{equation}
+\langle X,Y\rangle_{RC} = \sum_{i=1}^{n}\sum_{j=1}^{m}\sum_{k=1}^{n}\sum_{\ell=1}^{m} r_{ik}c_{j\ell}x_{ij}y_{k\ell}.
+\end{equation}
+
+Since we will only be taking about inner products of this form we will
+leave out the subscript \(RC\) from now on.
 
 \section{Matrix Decomposition}\label{matrix-decomposition}
 
-Define three subspaces of \(\mathbb{R}^{n\times m}\). We use \(e\) for
-vectors with all elements equal to one. The number of elements in \(e\)
-will be clear from the context, otherwise we will use \(e_m\) and
-\(e_n\).
+\subsection{Subspaces}\label{subspaces}
+
+We use \(e_n\) and \(e_m\) for vectors with \(n\) and \(m\) elements
+equal to one. If the number of elements is clear from the context we
+simply use \(e\).
+
+Define four subspaces of \(\mathbb{R}^{n\times m}\).
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(\mathbb{L}_\mu\), constant matrices, \(X=\mu e_ne_m'\).
+  \(\mathbb{L}_\mu\), constant matrices, of the form \(\mu e_ne_m'\).
 \item
-  \(\mathbb{L}_a\), matrices with all columns the same, \(X=ae_m'\).
+  \(\mathbb{L}_a\), matrices with all columns the same, of the form
+  \(ae_m'\).
 \item
-  \(\mathbb{L}_b\), matrices with all rows the same \(X=e_nb'\).
+  \(\mathbb{L}_b\), matrices with all rows the same, of the form
+  \(e_nb'\).
+\item
+  \(\mathbb{L}_h\), matrices orthogonal to the previous three spaces.
 \end{enumerate}
 
-We will hoose \(a, b, \mu\) such that these three subspacs are
-orthogonal in the Kronecker inner product. For this we need
-\begin{subequations}
+We will choose \(a, b, \mu\) and \(H\in\mathbb{L}_h\) such that these
+four subspacs are orthogonal in the Kronecker inner product. For this we
+need \begin{subequations}
 \begin{align}
 \text{tr}\ R\mu ee'Cea'&=\mu a'Re\times e'Ce=0,\\
-\text{tr}\ R\mu ee'Cbe'&=\mu b'Ce\times e'Re,\\
-\text{tr}\ Rae'Cbe'&=a'Re\times b'Ce.
+\text{tr}\ R\mu ee'Cbe'&=\mu b'Ce\times e'Re=0,\\
+\text{tr}\ Rae'Cbe'&=a'Re\times b'Ce=0,\\
+\text{tr}\ R\mu ee'CH'&=\mu e'CH'Re=0,\\
+\text{tr}\ Rae'CH'&=e'CH'Ra=0,\\
+\text{tr}\ Reb'CH'&=b'CH'Re=0.
 \end{align}
 \end{subequations}
 
-It follows the three subspaces are orthogonal if \(a'Re=b'Ce=0\). Thus
-we redefine our subspaces as
+It follows the four subspaces are orthogonal if \(a'Re=b'Ce=0\) and
+\(HCe\) and \(H'Re\) are zero. Thus we redefine our subspaces as
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(\mathbb{L}_\mu\): all \(X\) with \(X=\mu ee'\).
+  \(\mathbb{L}_\mu\): all matrices \(\mu ee'\).
 \item
-  \(\mathbb{L}_a\): all \(X\) with \(X=ae'\) where \(a'Re=0\).
+  \(\mathbb{L}_a\): all matrices \(ae'\) where \(a'Re=0\).
 \item
-  \(\mathbb{L}_b\): all \(X\) with \(X=eb'\) where \(b'Ce=0\).
+  \(\mathbb{L}_b\): all matrices \(eb'\) where \(b'Ce=0\).
+\item
+  \(\mathbb{L}_h\): all \(H\) with \(HCe=0\) and \(H'Re=0\).
 \end{enumerate}
 
-Now project, in the Kronecker metric, matrix \(X\) on each of these
+\subsection{Projection}\label{projection}
+
+Now project, in the Kronecker metric, a matrix \(X\) on each of these
 orthogonal subspaces.
 
-First on \(\mathbb{L}_\mu\). Minimize over \(\mu\) \begin{equation}
+\subsubsection{First}\label{first}
+
+First project on \(\mathbb{L}_\mu\). We must minimize \begin{equation}
 \|X-\mu ee'\|^2=\|X\|^2-2\mu e'RXCe+\mu^2e'Re\times e'Ce,
-\end{equation} and thus \begin{equation}
+\end{equation} over \(\mu\), with solution \begin{equation}
 \hat\mu=\frac{e'RXCe}{e'Re\times e'Ce}.\label{eq-mu}
-\end{equation} Now over \(\mathbb{L}_a\). We have \begin{equation}
+\end{equation}
+
+\subsubsection{Second}\label{second}
+
+Now project on \(\mathbb{L}_a\). We have \begin{equation}
 \|X-ae'\|^2=\|X\|^2-2a'RXCe+a'Ra\times e'Ce,
-\end{equation} which must be minimized over all \(a'Re=0\). Use a
-Lagrange multiplier \(\lambda\). Stationary equations are
+\end{equation} which must be minimized over all \(a'Re=0\). With a
+Lagrange multiplier \(\lambda\) the stationary equations are
 \begin{equation}
 RXCe-\lambda Re=e'Ce\times Ra.
 \end{equation} Premultiply by \(e'\) gives \begin{equation}
@@ -346,64 +375,40 @@ e'Ce\times\hat a=XCe-e\frac{e'RXCe}{e'Re},\label{eq-asolve}
 \hat a=\left(I-\frac{ee'R}{e'Re}\right)X\left(\frac{Ce}{e'Ce}\right).
 \end{equation}
 
-It is convenient to define the projectors \begin{align}
+At this point it is convenient to define the projectors \begin{align}
 P:=\frac{ee'R}{e'Re},\label{eq-pdef}\\
 Q:=\frac{Cee'}{e'Ce}.\label{eq-qdef}
 \end{align} The projection on \(\mathbb{L}_a\) is \begin{equation}
 \hat ae'=(I-P)XQ.
-\end{equation}
-
-Projecting on \(\mathbb{L}_b\) is similar, by symmetry. Thus
-\begin{equation}
-e\hat b'=PX(I-Q).
 \end{equation} In addition, from \eqref{eq-mu}, \begin{equation}
 \hat\mu ee'=PXQ.
-\end{equation} It follows that if we define \begin{equation}
-\hat H:=X-\hat\mu ee'-\hat ae'-e\hat b'\label{eq-hdef}
-\end{equation} then \begin{equation}
-\hat H=(I-P)X(I-Q).
 \end{equation}
 
-Define \(\mathbb{L}_h\) as the subspace of all matrices of this form, or
-equivalently the matrices with \(HCe=0\) and \(e'RH=0\).
+\subsubsection{Third}\label{third}
 
-Because \((I-Q)Ce=0\) it follows that \begin{subequations}
-\begin{equation}
-\text{tr}\ R\hat HC(\hat\mu ee')=0
+Projecting on \(\mathbb{L}_b\) is similar to projecting on
+\(\mathbb{L}_a\), by symmetry. Thus \begin{equation}
+e\hat b'=PX(I-Q).
 \end{equation}
-and 
-\begin{equation}
-\text{tr}\ R\hat HC(e\hat b')=0
-\end{equation}
-and
-\begin{equation}
-\text{tr}\ R\hat ae'C\hat H'=0
-\end{equation}
-\end{subequations} Thus \(\mathbb{L}_h\) is also orthogonal in the
-Kronecker inner product to the other three subspaces. It follows that in
-the Kronecker norm \begin{equation}
-\|X\|^2=\|PXQ\|^2+\|(I-P)XQ\|^2+\|PX(I-Q)\|^2+\|(I-P)X(I-Q)\|^2,
-\end{equation} and thus we not only have a decomposition of the data
-\(X\), but also of its Kronecker sum of squares.
 
-It also follows that if \(Y=\mu ee'+ae'+eb'+H\), with \(a'Re=b'Ce=0\),
-then \begin{multline}
-\|X-Y\|^2=\|PXQ-\mu ee'\|^2+\|(I-P)XQ-ae'\|^2+\\\|PX(I-Q)-eb'\|^2+\|(I-P)X(I-Q)-H\|^2,
-\end{multline} which can also be written as \begin{equation}
-\|X-Y\|^2=\|(\hat\mu-\mu)ee'\|^2+\|(\hat a-a)e'\|^2+\|e(\hat b-b)'\|^2+\|\hat H-H\|^2.
-\end{equation} Thus if we are fitting \(Y\) to \(X\) with separable
-restrictions on \(a\), \(b\), and \(H\) (in addition to \(a'Re=b'Ce=0\))
-then we can minimize each of the four components separately.
+\subsubsection{Fourth}\label{fourth}
 
-We have defined \(H\) in \eqref{eq-hdef} as the residual after
-projecting on the three orthogonal spaces. The orthogonality of the
-residual space is YAPT (Yet Another Pythogorean Theorem). Alternatively,
-we could have defined \(\mathbb{L}_h\) as the space of \(n\times m\)
-matrices satisfying \(HCe=0\) and \(H'Re=0\) and project on this space.
-This will produce the same \(\hat H\). Here is a proof of this last
-statement. The stationary equations for the projection, using two
-vectors \(\phi\) and \(\psi\) of Lagrange multipliers are
-\begin{subequations}
+If \(P\) and \(Q\) are arbitrary square matrices of orders \(n\) and
+\(m\), not necessarily projectors, we have \begin{equation}
+X=PXQ+(I-P)XQ+PX(I-Q)+(I-P)X(I-Q).
+\end{equation} For our decomposition it follows that if we define the
+``residual'' \begin{equation}
+\hat H:=X-\hat\mu ee'-\hat ae'-e\hat b'\label{eq-hdef},
+\end{equation} then \(\hat H=(I-P)X(I-Q)\). Because \(H\) in
+\eqref{eq-hdef} is the residual after projecting on a subspace the
+orthogonality of the residual space to the row and column spaces is
+basically Pythagoras' Theorem. Alternatively, however, we could have
+defined \(\hat H\) directly as the projection of \(X\) on
+\(\mathbb{L}_h\). This produces the same \(\hat H\). Here follows a
+proof of this last statement.
+
+The stationary equations for the projection, using two vectors \(\phi\)
+and \(\psi\) of Lagrange multipliers, are \begin{subequations}
 \begin{align}
 H&=X-\phi e'-e\psi',\label{eq-hstat1}\\
 HCe &= 0,\label{eq-hstat2}\\
@@ -431,14 +436,201 @@ that \begin{equation}
 \(Ce\), and then using \eqref{eq-hstat2} and \eqref{eq-hstat3}, gives
 that \(\alpha+\beta=\hat\mu\). End of proof.
 
-The developments in this paper can be generalized in several ways. In
-the first place the same reasoning applies to multiway arrays. If the
-array has \(p\) ``dimensions'' then there are \(2^p\) components.
-Secondly, vectors \(e_n\) and \(e_m\) in the formulas can be replaced by
-any vectors \(u\) and \(v\) with \(n\) and \(m\) elements. In fact, with
-some additional notation, they can be replaced by matrices \(U\) and
-\(V\). And finally the results apply to any finite sequence of
-orthogonal subspaces in any (finite-dimensional) inner product space.
+Define \(\mathbb{L}_h\) as the subspace of all matrices of this form, or
+equivalently the matrices with \(HCe=0\) and \(e'RH=0\).
+
+Because \((I-Q)Ce=0\) it follows that \begin{subequations}
+\begin{equation}
+\text{tr}\ R\hat HC(\hat\mu ee')=0
+\end{equation}
+and 
+\begin{equation}
+\text{tr}\ R\hat HC(e\hat b')=0
+\end{equation}
+and
+\begin{equation}
+\text{tr}\ R\hat ae'C\hat H'=0
+\end{equation}
+\end{subequations} Thus \(\mathbb{L}_h\) is also orthogonal in the
+Kronecker inner product to the other three subspaces.
+
+\subsection{Pythagoras}\label{pythagoras}
+
+It follows that in the Kronecker norm \begin{equation}
+\|X\|^2=\|PXQ\|^2+\|(I-P)XQ\|^2+\|PX(I-Q)\|^2+\|(I-P)X(I-Q)\|^2,\label{eq-decomp}
+\end{equation} and thus we not only have a decomposition of the data
+\(X\), but also of its squared Kronecker norm.
+
+This is important when fitting \(Y\) to \(X\), with various restrictions
+on \(Y\). Suppose, for example, we require \(Y=\mu ee'+ae'+eb'+H\), with
+the orthogonality or identifiability constraints \(a'Re=b'Ce=0\) and
+\(HCe=0\) and \(H'Re=0\), and possibly with additional separate
+constraints on \(\mu\), \(a\), \(b\), and \(H\). We may require, for
+example, that \(\text{rank}(H)\leq p\), with \(p<\min(m-1,n-1)\) and
+that \(a\) and \(b\) are increasing. We compute the projections first
+and then fit \(Y\). From \eqref{eq-decomp} We can write
+\eqref{eq-decomp} as \begin{multline}
+\|X-Y\|^2=(\hat\mu-\mu)^2(e'Re)^2(e'Ce)^2+\\\{(\hat a-a)'R(\hat a-a)\}^2(e'Ce)^2+\{(\hat b-b)'C(\hat b-b)\}^2(e'Re)^2+\|(\hat H-H)\|^2.
+\end{multline} we can minimize each of the four components separately.
+
+In the example with monotonicity constraints on \(a\) and \(b\) and rank
+constraints\\
+on \(H\) that means using monotone regression to minimize
+\((\hat a-a)'R(\hat a-a)\) and \((\hat b-b)'C(\hat b-b)\) over
+increasing \(a\) and \(b\) and minimizing
+\(\text{tr} R(\hat H-H)C(\hat H-H)'\) with \(H=AB'\) over the
+\(n\times p\) matrices \(A\) and the \(m\times p\) matrices \(B\). For
+this last problem the stationary equations for \(A\) and \(B\) are
+(ignoring the orthogonality constraints of \(H\) for the time being)
+\begin{subequations}
+\begin{align}
+R\hat HCB&=RA(B'CB),\\
+C\hat H'RA&=CB(A'RA).
+\end{align}
+\end{subequations} If we define \(\tilde B:=C^\frac12 B\) and
+\(\tilde A:=R^\frac12 A\) then \begin{subequations}
+\begin{align}
+\left\{R^{-\frac12}\hat HC^{-\frac12}\right\}\tilde B&=\tilde A(\tilde B'\tilde B),\\
+\left\{C^{-\frac12}\hat H'R^{-\frac12}\right\}\tilde A&=\tilde B(\tilde A'\tilde A),
+\end{align}
+\end{subequations} showing that \(\tilde A\) and \(\tilde B\) can be
+computed from the singular value decomposition of
+\(R^{-\frac12}\hat HC^{-\frac12}\). Since \(\tilde HCe=0\) we see that
+\(C^\frac12e\) is a singular vector with singular value zero, and the
+other singular vectors in \(\tilde B\) can be chosen orthogonal to
+\(C^\frac12e\). Thus \(\tilde B'C^\frac12e=B'Ce=0\), and because
+\(H=AB'\) we have \(HCe=0\). In the same way \(H'Re=0\), and the
+orthogonality/identifiability conditions on \(H\) are satisfied.
+
+\subsection{Special Case}\label{special-case}
+
+The classical special case of our results has \(R=I\) and \(C=I\). Then
+\(P\) and \(Q\) are symmetric projectors, with \(P=ee'/n\) and
+\(Q=ee'/m\). Vector \(\hat a\) are the centered row means, \(\hat b\)
+are the centered column means, \(\hat\mu\) is the grand mean, and matrix
+\(\hat H\) is the doubly-centered \(X\). Orthogonality of the subspaces
+forms the basis for Factorial Analysis of Variance.
+
+\subsection{Singular R and/or C}\label{singular-r-andor-c}
+
+If either \(R\) or \(C\) is singular then some of the analysis in the
+previous sections must be modified.
+
+For the decomposition \begin{equation}
+X=\mu ee'+ae'+eb'+H
+\end{equation} consider the case with \(Ce=0\). The projections on
+\(\mathbb{L}_\mu\) and \(\mathbb{L}_a\) are both zero, so that we are
+basically looking at the projection on \(\mathbb{L}_b\) only, with no
+need to require orthogonality. The projection is \(e\hat b'=PX\) and
+thus the residual is \(\hat H=(I-P)X\). If both \(Ce=0\) and \(Re=0\)
+all three projections are zero and \(\hat H=X\).
+
+A singularity \(Cz=0\) for some \(z\neq e\) is less serious.
+
+\section{Generalizations}\label{generalizations}
+
+The developments in this paper can be generalized in several ways.
+
+\subsection{Regression}\label{regression}
+
+The vectors \(e_n\) and \(e_m\) in our formulas can be replaced by any
+known vectors \(u\) and \(v\) with \(n\) and \(m\) elements. In fact
+they can be replaced by known \(n\times r\) and \(m\times r\) matrices
+\(U\) and \(V\) of rank \(r\). Assume without loss of generality that
+\(U'RU=V'CV=I\).
+
+\subsubsection{Subspaces}\label{subspaces-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(\mathbb{L}_M\): \(UMV'\) with \(M\) of dimension \(r\times r\),
+\item
+  \(\mathbb{L}_A\): \(UA\) with \(A\) of dimension \(r\times m\),
+\item
+  \(\mathbb{L}_B\): \(B'V'\) with \(B\) of dimension \(r\times n\),
+\item
+  \(\mathbb{L}_H\): the residual space.
+\end{enumerate}
+
+Thus the decomposition we are looking for is \begin{equation}
+X=UMV'+UA+B'V'+H,
+\end{equation} which is a form of regressing \(X\) on \(U\) and \(V\).
+Or, alternatively, the residuals \(H\) are \(X\) ``corrected for'' \(U\)
+and \(V\).
+
+\subsubsection{Orthogonality}\label{orthogonality}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(\mathbb{L}_M\perp\mathbb{L}_A\) if \(\text{tr}\ U'RUMV'CA'=0\) thus
+  if \(ACV=0\)
+\item
+  \(\mathbb{L}_M\perp\mathbb{L}_B\) if \(\text{tr}\ BRUMV'CV=0\) thus if
+  \(BRU=0\)
+\item
+  \(ACV=0\) and \(BRU=0\) already imply that
+  \(\mathbb{L}_A\perp\mathbb{L}_B\).
+\end{enumerate}
+
+\subsubsection{Projection}\label{projection-1}
+
+We define the two projectors \(P:=UU'R\) and \(Q:=CVV'\).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Projection on \(\mathbb{L}_M\) using \(\hat M=U'RXCV\) is \(PXQ\).
+\item
+  Projection on \(\mathbb{L}_A\) using \(\hat A=U'RX(I-Q)\) is
+  \(PX(I-Q)\).
+\item
+  Projection on \(\mathbb{L}_B\) using \(\hat B'=(I-P)XCV\) is
+  \((I-P)XQ\).
+\item
+  Projection on \(\mathbb{L}_H\) is \((I-P)X(I-Q)\).
+\end{enumerate}
+
+\subsection{Multidimensional Arrays}\label{multidimensional-arrays}
+
+The same reasoning applies to multidimensional arrays. If the array has
+\(p\) ``dimensions'' then there are \(2^p\) components. The squared
+Kronecker inner product does not have a simple matrix representation
+like \(\text{tr}\ RXCX'\) any more. But, in case of
+\(n_1\times n_2\times n_3\) arrays \(X\) and \(Y\) with positive
+semi-definite weight matrices \(R\), \(C\), and \(S\) of orders
+\(n_1, n_2\) and \(n_3\), we still have \begin{equation}
+\langle X,Y\rangle = \text{vec}(X)'(S\otimes C\otimes R)\text{vec}(Y)
+\end{equation} or, elementwise, \begin{equation}
+\langle X,Y\rangle = \sum_{i=1}^{n_1}\sum_{j=1}^{n_2}\sum_{k=1}^{n_3}\sum_{i'=1}^{n_1}\sum_{j'=1}^{n_2}\sum_{k'=1}^{n_3} r_{ii'}c_{jj'}s_{kk'}x_{ijk}y_{i'j'k'}
+\end{equation} The eight subspaces are of the form \(x_{ijk}=\mu,
+x_{ijk}=a_i,
+x_{ijk}=b_j,
+x_{ijk}=t_j,
+x_{ijk}=\gamma_{ij},
+x_{ijk}=\delta_{ik},
+x_{ijk}=\epsilon_{jk},\) and a final ``residual'' space. The
+orthogonality of the subspaces and the formulas for the projections can
+be worked out in the same way as for the two-dimensional case.
+
+\subsection{Coordinate-free}\label{coordinate-free}
+
+The results apply to any finite sequence of orthogonal subspaces in any
+finite-dimensional inner product space. Suppose \(\Pi_1,..,\Pi_t\) are
+projectors (linear idempotent operators) on orthogonal
+\(\mathbb{L}_1,\cdots,\mathbb{L}_t\). Thus \(\Pi_s=\Pi_s^2\) for all
+\(s\) and \(\Pi_s\Pi_t=0\) for all \(s\neq t\). If
+\(\Pi_r=I-(\Pi_1+\cdots+\Pi_t)\) then \(\Pi_s\Pi_r=0\) for all \(s\).
+Thus the residual space is orthogonal to all \(\mathbb{L}_s\). The
+decomposition is \begin{equation}
+X=\Pi_1(X)+\Pi_2(X)+\cdots+\Pi_r(X).
+\end{equation} In our examples in the previous sections we have
+\(\Pi_1(X)=PXQ\), \(\Pi_2(X)=PX(I-Q)\), \(\Pi_3(X)=(I-P)XQ\), and
+\(\Pi_4(X)=(I-P)X(I-Q)\).
 
 \sectionbreak
 
@@ -447,14 +639,14 @@ orthogonal subspaces in any (finite-dimensional) inner product space.
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{12345}\NormalTok{)}
-\NormalTok{ymat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{12}\NormalTok{), }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\NormalTok{xmat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{12}\NormalTok{), }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{)}
 \NormalTok{rmat }\OtherTok{\textless{}{-}} \FunctionTok{crossprod}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{40}\NormalTok{), }\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{)) }\SpecialCharTok{/} \DecValTok{10}
 \NormalTok{cmat }\OtherTok{\textless{}{-}} \FunctionTok{crossprod}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{30}\NormalTok{), }\DecValTok{10}\NormalTok{, }\DecValTok{3}\NormalTok{)) }\SpecialCharTok{/} \DecValTok{10}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-[1] "ymat"
+[1] "xmat"
 \end{verbatim}
 
 \begin{verbatim}
@@ -494,7 +686,7 @@ We now apply the decompose() function from the code section.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{h}\OtherTok{\textless{}{-}}\FunctionTok{decompose}\NormalTok{(ymat, rmat, cmat)}
+\NormalTok{h}\OtherTok{\textless{}{-}}\FunctionTok{decompose}\NormalTok{(xmat, rmat, cmat)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -542,7 +734,8 @@ The Kronecker inner products of the four components are:
 [4,]  2.081668e-17 -5.551115e-17 -8.604228e-16  9.280312e+00
 \end{verbatim}
 
-The trace of the inner product matrix and the squared norm of the data:
+Check: the trace of the inner product matrix and the squared norm of the
+data:
 
 \begin{verbatim}
 [1] 12.88097 12.88097
@@ -555,7 +748,7 @@ The trace of the inner product matrix and the squared norm of the data:
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{12345}\NormalTok{)}
-\NormalTok{ymat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{12}\NormalTok{), }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\NormalTok{xmat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{12}\NormalTok{), }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{)}
 \NormalTok{rmat }\OtherTok{\textless{}{-}} \FunctionTok{crossprod}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{40}\NormalTok{), }\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{)) }\SpecialCharTok{/} \DecValTok{10}
 \NormalTok{cmat }\OtherTok{\textless{}{-}} \FunctionTok{crossprod}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{30}\NormalTok{), }\DecValTok{10}\NormalTok{, }\DecValTok{3}\NormalTok{)) }\SpecialCharTok{/} \DecValTok{10}
 
@@ -587,6 +780,7 @@ The trace of the inner product matrix and the squared norm of the data:
 \end{Highlighting}
 \end{Shaded}
 
+\section{References}\label{references}
 
 
 
