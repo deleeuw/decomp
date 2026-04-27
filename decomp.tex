@@ -136,6 +136,39 @@
 \makeatother
 
 
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 
 
@@ -511,22 +544,6 @@ are the centered column means, \(\hat\mu\) is the grand mean, and matrix
 \(\hat H\) is the doubly-centered \(X\). Orthogonality of the subspaces
 forms the basis for Factorial Analysis of Variance.
 
-\subsection{Singular R and/or C}\label{singular-r-andor-c}
-
-If either \(R\) or \(C\) is singular then some of the analysis in the
-previous sections must be modified.
-
-For the decomposition \begin{equation}
-X=\mu ee'+ae'+eb'+H
-\end{equation} consider the case with \(Ce=0\). The projections on
-\(\mathbb{L}_\mu\) and \(\mathbb{L}_a\) are both zero, so that we are
-basically looking at the projection on \(\mathbb{L}_b\) only, with no
-need to require orthogonality. The projection is \(e\hat b'=PX\) and
-thus the residual is \(\hat H=(I-P)X\). If both \(Ce=0\) and \(Re=0\)
-all three projections are zero and \(\hat H=X\).
-
-A singularity \(Cz=0\) for some \(z\neq e\) is less serious.
-
 \section{Generalizations}\label{generalizations}
 
 The developments in this paper can be generalized in several ways.
@@ -595,6 +612,44 @@ We define the two projectors \(P:=UU'R\) and \(Q:=CVV'\).
   Projection on \(\mathbb{L}_H\) is \((I-P)X(I-Q)\).
 \end{enumerate}
 
+\subsection{Singular R and/or C}\label{singular-r-andor-c}
+
+If either \(R\) or \(C\) is singular then some of the analysis in the
+previous sections must be modified. This is one situation in which
+replacing the vectors \(e_n\) and \(e_m\) by different vectors\(u\) and
+\(v\) may come in handy.
+
+First consider a serious case of singularity. For the decomposition
+\begin{equation}
+X=\mu ee'+ae'+eb'+H
+\end{equation} suppose \(Ce=0\). The projections on \(\mathbb{L}_\mu\)
+and \(\mathbb{L}_a\) are both zero, so that we are basically looking at
+the projection on \(\mathbb{L}_b\) only, with no need to require
+orthogonality. The projection is \(e\hat b'=PX\) and thus the residual
+is \(\hat H=(I-P)X\). In the case that both \(Ce=0\) and \(Re=0\) all
+three projections are zero and \(\hat H=X\). Nothing lost, nothing
+gained,
+
+A singularity \(Cz=0\) or \(Rz=0\) for some \(z\neq e\) is less serious.
+The projections and the decomposition can be carried out as usual, but
+the projections may not be unique. A possible approach is to use
+eigen-decompositions \(R=K\Phi K'\) and \(C=L\Psi L'\), with \(\Phi\)
+and \(\Psi\) positive definite, diagonal and of orders
+\(\text{rank}(R)\) and \(\text{rank}(C)\). Then \begin{equation}
+\langle X,Y\rangle_{RC}=\langle K'XL,K'YL\rangle_{\Phi\Psi},
+\end{equation} and we can decompose \(\tilde X:=K'XL\) uniquely as
+\begin{equation}
+\tilde X=\mu uv'+\tilde av'+u\tilde b'+\tilde H,
+\end{equation} with \(u:=K'e\), \(v:=L'e\) \(\tilde a:=K'a\),
+\(\tilde b:=L'b\), and \(\tilde H:=K'HL\). After that transform this
+unique solution back to the non-unique solution for \(a\), \(b\), and
+\(H\).
+
+The even more singular situation in which \(R\) and \(C\) are
+rectangular is discussed in De Leeuw
+(\citeproc{ref-deleeuw_A_84b}{1984}) and Zha
+(\citeproc{ref-zha_91}{1991}).
+
 \subsection{Multidimensional Arrays}\label{multidimensional-arrays}
 
 The same reasoning applies to multidimensional arrays. If the array has
@@ -616,7 +671,7 @@ x_{ijk}=\delta_{ik},
 x_{ijk}=\epsilon_{jk},\) and a final ``residual'' space. The
 orthogonality of the subspaces and the formulas for the projections can
 be worked out in the same way as for the two-dimensional case. I may do
-this in some other paper,
+this in some other paper. Or I may not.
 
 \subsection{Look Ma, No Coordinates}\label{look-ma-no-coordinates}
 
@@ -633,6 +688,41 @@ X=\Pi_1(X)+\Pi_2(X)+\cdots+\Pi_r(X).
 \end{equation} In our examples from the previous sections we have
 \(\Pi_1(X)=PXQ\), \(\Pi_2(X)=PX(I-Q)\), \(\Pi_3(X)=(I-P)XQ\), and
 \(\Pi_4(X)=(I-P)X(I-Q)\).
+
+\subsection{ML for the Matrix Variate
+Normal}\label{ml-for-the-matrix-variate-normal}
+
+If the \(n\times m\) matrix\(X\) has the matrix variate normal (MVN)
+distribution with mean parameter \(Y\) and dispersion parameters \(R\)
+and \(C\) then the negative log likelihood is \begin{equation}
+\mathcal{L}(Y,R,C)=m\ \text{det}(R)+n\ \text{det}(C)+\text{tr}\ R^{-1}(X-Y)C^{-1}(X-Y)'.\label{eq-mvn}
+\end{equation} There is a huge literature on the MVN distribution and
+its applications in environmental statistics, genetics, three-way
+analysis, growth curve analysis, and time series analysis. We refer to
+Chapter 2 in Gupta and Nagar (\citeproc{ref-gupta_nagar_00}{2000}), to
+the edited volume of Sakata (\citeproc{ref-sakata_16}{2016}), to the
+unpublished report of De Leeuw and Kukuyeva
+(\citeproc{ref-deleeuw_kukuyeva_U_09}{2009}), to the MVN visualisation
+paper of Pocuca et al.
+(\citeproc{ref-pocuca_gallaugher_clark_mcnicholas_23}{1923}), to the
+recent clustering application by Berrettini et al.
+(\citeproc{ref-berrettini_galimberti_viroli_25}{2025}), and to the R
+package matrixNormal (Hargarten (\citeproc{ref-hargarten_26}{2026})).
+These publications, and their references, should give an idea of the
+scope of the MVN distribution and the separable convariances of the
+Kronecker inner product.
+
+Minimizing \eqref{eq-mvn} can be done using block relaxation (De Leeuw
+(\citeproc{ref-deleeuw_C_94c}{1994})). We iteratively alternate
+minimization over \(R\) and \(C\) for fixed \(Y\) and minimization over
+\(Y\) for fixed \(R\) and \(C\). Minimization over \(R\) and \(C\) can
+be done with majorization, in this case in its EM-algorithm form
+(Dutilleul (\citeproc{ref-dutilleul_99}{1999}), Manceur and Dutilleul
+(\citeproc{ref-manceur_dutilleul_13}{2013})). Minimization of \(Y\) for
+fixed \(R\) and \(C\) is the topic of this paper and of {de Leeuw and
+Graffelman} (\citeproc{ref-deleeuw_graffelman_E_26d}{2026}). Application
+of our recent results to ML fitting of the MVN will have to wait for
+another paper.
 
 \sectionbreak
 
@@ -782,7 +872,73 @@ data:
 \end{Highlighting}
 \end{Shaded}
 
-\section{References}\label{references}
+\sectionbreak
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{1}
+\bibitem[\citeproctext]{ref-berrettini_galimberti_viroli_25}
+Berrettini, Marco, Giuliano Galimberti, and Cinzia Viroli. 2025.
+{``Mean-Restricted Matrix-Variate Normals with an Application to
+Clustering.''} \emph{Statistics and Computing} 35:100: 1--20.
+
+\bibitem[\citeproctext]{ref-deleeuw_A_84b}
+De Leeuw, Jan. 1984. {``Fixed-Rank Approximation with Singular Weight
+Matrices.''} \emph{Computational Statistics Quarterly} 1: 3--12.
+\url{https://jansweb.netlify.app/publication/deleeuw-a-84-b/deleeuw-a-84-b.pdf}.
+
+\bibitem[\citeproctext]{ref-deleeuw_C_94c}
+De Leeuw, Jan. 1994. {``{Block Relaxation Algorithms in Statistics}.''}
+In \emph{Information Systems and Data Analysis}, edited by H. H. Bock,
+W. Lenski, and M. M. Richter. Springer Verlag.
+\url{https://jansweb.netlify.app/publication/deleeuw-c-94-c/deleeuw-c-94-c.pdf}.
+
+\bibitem[\citeproctext]{ref-deleeuw_graffelman_E_26d}
+{de Leeuw, Jan, and Jan Graffelman}. 2026. {``Matrix Approximation with
+Kronecker and Precision Weighting.''}
+\url{https://jansweb.netlify.app/publication/deleeuw-graffelman-e-26-d/deleeuw-graffelman-e-26-d.pdf}.
+
+\bibitem[\citeproctext]{ref-deleeuw_kukuyeva_U_09}
+De Leeuw, Jan, and Irina Kukuyeva. 2009. {``{Fixed-Rank Approximation
+with Constraints}.''}
+\url{https://jansweb.netlify.app/publication/deleeuw-kukuyeva-u-09/deleeuw-kukuyeva-u-09.pdf}.
+
+\bibitem[\citeproctext]{ref-dutilleul_99}
+Dutilleul, Pierre. 1999. {``The MLE Algorithm for the Matrix Normal
+Distribution.''} \emph{Journal of Statistical Computation and
+Simulation} 64 (105--123).
+
+\bibitem[\citeproctext]{ref-gupta_nagar_00}
+Gupta, Arjan K., and D. K. Nagar. 2000. \emph{Matrix Variate
+Distributions}. {Chapman \& Hall}.
+
+\bibitem[\citeproctext]{ref-hargarten_26}
+Hargarten, Paul M. 2026. \emph{matrixNormal: The Matrix Normal
+Distribution}. \url{https://doi.org/10.32614/CRAN.package.matrixNormal}.
+
+\bibitem[\citeproctext]{ref-manceur_dutilleul_13}
+Manceur, Ameur M., and Pierre Dutilleul. 2013. {``Maximum Likelihood
+eEtimation for the Tensor Normal Distribution: Algorithm, Minimum Sample
+Size, and Empirical Bias and Dispersion.''} \emph{Journal of
+Computational and Applied Mathematics} 239: 37--49.
+
+\bibitem[\citeproctext]{ref-pocuca_gallaugher_clark_mcnicholas_23}
+Pocuca, Gallaugher, Nikola, Katharine M. Clark, and Paul D. McNicholas.
+1923. {``Visual Assessment of Matrix-Variate Normality.''}
+\emph{{Australian and New Zealand Journal of Statistics}} 65 (2):
+152--65.
+
+\bibitem[\citeproctext]{ref-sakata_16}
+Sakata, Toshio, ed. 2016. \emph{Applied Matrix and Tensor Variate Data
+Analysis}. Springer. \url{https://doi.org/10.1007/978-4-431-55387-8}.
+
+\bibitem[\citeproctext]{ref-zha_91}
+Zha, Hongyuan. 1991. {``The Product-Product Singular Value Decomposition
+of Matrix Triplets.''} \emph{BIT} 31: 711--26.
+
+\end{CSLReferences}
 
 
 
