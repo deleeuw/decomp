@@ -615,20 +615,20 @@ We define the two projectors \(P:=UU'R\) and \(Q:=CVV'\).
 \subsection{Singular R and/or C}\label{singular-r-andor-c}
 
 If either \(R\) or \(C\) is singular then some of the analysis in the
-previous sections must be modified. This is one situation in which
-replacing the vectors \(e_n\) and \(e_m\) by different vectors\(u\) and
-\(v\) may come in handy.
+previous sections must be modified. Singularity is one situation in
+which replacing the vectors \(e_n\) and \(e_m\) by different vectors
+\(u\) and \(v\) may come in handy.
 
-First consider a serious case of singularity. For the decomposition
-\begin{equation}
+First consider a special, and especially serious, case of singularity.
+For the decomposition \begin{equation}
 X=\mu ee'+ae'+eb'+H
 \end{equation} suppose \(Ce=0\). The projections on \(\mathbb{L}_\mu\)
 and \(\mathbb{L}_a\) are both zero, so that we are basically looking at
 the projection on \(\mathbb{L}_b\) only, with no need to require
 orthogonality. The projection is \(e\hat b'=PX\) and thus the residual
-is \(\hat H=(I-P)X\). In the case that both \(Ce=0\) and \(Re=0\) all
-three projections are zero and \(\hat H=X\). Nothing lost, nothing
-gained,
+is \(\hat H=(I-P)X\). In the even more unfortunate case that both
+\(Ce=0\) and \(Re=0\) all three projections are zero and \(\hat H=X\).
+Nothing lost, nothing gained,
 
 A singularity \(Cz=0\) or \(Rz=0\) for some \(z\neq e\) is less serious.
 The projections and the decomposition can be carried out as usual, but
@@ -652,15 +652,15 @@ rectangular is discussed in De Leeuw
 
 \subsection{Multidimensional Arrays}\label{multidimensional-arrays}
 
-The same reasoning applies to multidimensional arrays. If the array has
-\(p\) ``dimensions'' then there are \(2^p\) components. The squared
-Kronecker inner product does not have a simple matrix representation
-like \(\text{tr}\ RXCX'\) any more. But, in case of
+Our analysis for matrices also applies to multidimensional arrays. If
+the array has \(p\) ``dimensions'' then there are \(2^p\) components.
+The squared Kronecker inner product does not have a simple matrix
+representation like \(\text{tr}\ RXCX'\) any more. But, in case of
 \(n_1\times n_2\times n_3\) arrays \(X\) and \(Y\) with positive
 semi-definite weight matrices \(R\), \(C\), and \(S\) of orders
 \(n_1, n_2\) and \(n_3\), we still have \begin{equation}
 \langle X,Y\rangle = \text{vec}(X)'(S\otimes C\otimes R)\text{vec}(Y)
-\end{equation} or, elementwise, \begin{equation}
+\end{equation} and, elementwise, \begin{equation}
 \langle X,Y\rangle = \sum_{i=1}^{n_1}\sum_{j=1}^{n_2}\sum_{k=1}^{n_3}\sum_{i'=1}^{n_1}\sum_{j'=1}^{n_2}\sum_{k'=1}^{n_3} r_{ii'}c_{jj'}s_{kk'}x_{ijk}y_{i'j'k'}
 \end{equation} The eight subspaces are of the form \(x_{ijk}=\mu,
 x_{ijk}=a_i,
@@ -675,15 +675,15 @@ this in some other paper. Or I may not.
 
 \subsection{Look Ma, No Coordinates}\label{look-ma-no-coordinates}
 
-The results apply to any finite sequence of orthogonal subspaces in any
-finite-dimensional inner product space. Suppose \(\Pi_1,..,\Pi_t\) are
-projectors (linear idempotent operators) on orthogonal
-\(\mathbb{L}_1,\cdots,\mathbb{L}_t\), and \(\circ\) is composition. Thus
-\(\Pi_s=\Pi_s\circ\Pi_s\) for all \(s\) and \(\Pi_s\circ \Pi_t=0\) for
-all \(s\neq t\). If \(\Pi_r=I-(\Pi_1+\cdots+\Pi_t)\) then
-\(\Pi_s\circ \Pi_r=0\) for all \(s\). Thus the residual space is
-orthogonal to all \(\mathbb{L}_s\). The decomposition is
-\begin{equation}
+Our approach to matrux space also applies to any finite sequence of
+orthogonal subspaces in any finite-dimensional inner product space.
+Suppose \(\Pi_1,..,\Pi_t\) are projectors (linear idempotent operators)
+on orthogonal subspaces \(\mathbb{L}_1,\cdots,\mathbb{L}_t\), and
+\(\circ\) is composition. Thus \(\Pi_s=\Pi_s\circ\Pi_s\) for all \(s\)
+and \(\Pi_s\circ \Pi_t=0\) for all \(s\neq t\). If
+\(\Pi_r=I-(\Pi_1+\cdots+\Pi_t)\) then \(\Pi_s\circ \Pi_r=0\) for all
+\(s\). Thus the residual space is orthogonal to all \(\mathbb{L}_s\).
+The decomposition is \begin{equation}
 X=\Pi_1(X)+\Pi_2(X)+\cdots+\Pi_r(X).
 \end{equation} In our examples from the previous sections we have
 \(\Pi_1(X)=PXQ\), \(\Pi_2(X)=PX(I-Q)\), \(\Pi_3(X)=(I-P)XQ\), and
@@ -716,13 +716,13 @@ Minimizing \eqref{eq-mvn} can be done using block relaxation (De Leeuw
 (\citeproc{ref-deleeuw_C_94c}{1994})). We iteratively alternate
 minimization over \(R\) and \(C\) for fixed \(Y\) and minimization over
 \(Y\) for fixed \(R\) and \(C\). Minimization over \(R\) and \(C\) can
-be done with majorization, in this case in its EM-algorithm form
-(Dutilleul (\citeproc{ref-dutilleul_99}{1999}), Manceur and Dutilleul
-(\citeproc{ref-manceur_dutilleul_13}{2013})). Minimization of \(Y\) for
-fixed \(R\) and \(C\) is the topic of this paper and of {de Leeuw and
-Graffelman} (\citeproc{ref-deleeuw_graffelman_E_26d}{2026}). Application
-of our recent results to ML fitting of the MVN will have to wait for
-another paper.
+be done with majorization, in this case in its EM incarnation (Dutilleul
+(\citeproc{ref-dutilleul_99}{1999}), Manceur and Dutilleul
+(\citeproc{ref-manceur_dutilleul_13}{2013})). Minimization over \(Y\)
+for fixed \(R\) and \(C\) is the topic of this paper and of {de Leeuw
+and Graffelman} (\citeproc{ref-deleeuw_graffelman_E_26d}{2026}).
+Application of our recent results to ML fitting of the MVN will have to
+wait for another paper.
 
 \sectionbreak
 
